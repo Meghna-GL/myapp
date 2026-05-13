@@ -31,16 +31,19 @@ jobs:
           docker push $ECR_REGISTRY/myapp:$IMAGE_TAG  
 
       - name: Update Manifest Repo
+        env:
+          GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
         run: |
           git config --global user.email "meghna.srivastava@globallogic.com"
           git config --global user.name "Meghna-GL"
           
-          # Notice the format: https://<token>@github.com/...
-          git clone https://x-token-auth:${{ secrets.GITOPS_TOKEN }}@github.com/Meghna-GL/myapp-config.git
+          # We use the token to tell Git how to log in for this specific repo
+          git clone https://Meghna-GL:${GITOPS_TOKEN}@github.com/Meghna-GL/myapp-config.git
           
           cd myapp-config
-          # Using the exact name of your file
-          sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/my-cool-app:${{ github.sha }}|g" deployment.yaml
+          
+          # This command finds the 'image:' line and replaces the whole line
+          sed -i "s|image:.*|image: ${{ steps.login-ecr.outputs.registry }}/myapp:${{ github.sha }}|g" deployment.yaml
           
           git add deployment.yaml
           git commit -m "Update image to ${{ github.sha }}"
