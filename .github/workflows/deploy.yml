@@ -30,3 +30,16 @@ jobs:
           docker build -t $ECR_REGISTRY/myapp:$IMAGE_TAG .
           docker push $ECR_REGISTRY/myapp:$IMAGE_TAG  
 
+      - name: Update Manifest Repo
+        run: |
+          git config --global user.email "meghna.srivastava@globallogic.com"
+          git config --global user.name "Meghna-GL"
+          # Clone the Config Repo
+          git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/Meghna-GL/myapp-config.git
+          cd myapp-config
+          # Use 'sed' to swap "REPLACE_ME" with the actual ECR image path
+          sed -i "s|image: REPLACE_ME|image: ${{ steps.login-ecr.outputs.registry }}/my-cool-app:${{ github.sha }}|g" deployment.yaml
+          # Push the changes back to GitHub
+          git add deployment.yaml
+          git commit -m "Update image to ${{ github.sha }}"
+          git push
