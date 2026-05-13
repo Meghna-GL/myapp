@@ -36,7 +36,7 @@ jobs:
           git config --global user.name "Meghna-GL"
           
           # Notice the format: https://<token>@github.com/...
-          git clone https://x-token-auth:${{ secrets.MY_GITHUB_TOKEN }}@github.com/Meghna-GL/myapp-config.git
+          git clone https://x-token-auth:${{ secrets.GITHUB_TOKEN }}@github.com/Meghna-GL/myapp-config.git
           
           cd myapp-config
           # Using the exact name of your file
