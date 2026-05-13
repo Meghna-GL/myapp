@@ -34,12 +34,14 @@ jobs:
         run: |
           git config --global user.email "meghna.srivastava@globallogic.com"
           git config --global user.name "Meghna-GL"
-          # Clone the Config Repo
-          git clone https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/Meghna-GL/myapp-config.git
+          
+          # Notice the format: https://<token>@github.com/...
+          git clone https://x-token-auth:${{ secrets.MY_GITHUB_TOKEN }}@github.com/Meghna-GL/myapp-config.git
+          
           cd myapp-config
-          # Use 'sed' to swap "REPLACE_ME" with the actual ECR image path
-          sed -i "s|image: REPLACE_ME|image: ${{ steps.login-ecr.outputs.registry }}/my-cool-app:${{ github.sha }}|g" deployment.yaml
-          # Push the changes back to GitHub
+          # Using the exact name of your file
+          sed -i "s|image: .*|image: ${{ steps.login-ecr.outputs.registry }}/my-cool-app:${{ github.sha }}|g" deployment.yaml
+          
           git add deployment.yaml
           git commit -m "Update image to ${{ github.sha }}"
-          git push
+          git push origin main
