@@ -32,13 +32,13 @@ jobs:
 
       - name: Update Manifest Repo
         env:
-          GITOPS_TOKEN: ${{ secrets.GITOPS_TOKEN }}
+          MY_GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
         run: |
           git config --global user.email "meghna.srivastava@globallogic.com"
           git config --global user.name "Meghna-GL"
           
           # We use the token to tell Git how to log in for this specific repo
-          git clone https://Meghna-GL:${MY-GITHUB_TOKEN}@github.com/Meghna-GL/myapp-config.git
+          git clone https://Meghna-GL:${MY_GITHUB_TOKEN}@github.com/Meghna-GL/myapp-config.git
           
           cd myapp-config
           
