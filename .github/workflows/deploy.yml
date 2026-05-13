@@ -38,7 +38,7 @@ jobs:
           git config --global user.name "Meghna-GL"
           
           # We use the token to tell Git how to log in for this specific repo
-          git clone https://Meghna-GL:${GITOPS_TOKEN}@github.com/Meghna-GL/myapp-config.git
+          git clone https://Meghna-GL:${MY-GITHUB_TOKEN}@github.com/Meghna-GL/myapp-config.git
           
           cd myapp-config
           
